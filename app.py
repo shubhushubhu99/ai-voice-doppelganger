@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 =====================================
 VOICE DOPPELGANGER - BACKEND (Flask)
@@ -251,13 +252,21 @@ def clone_voice(requests_remaining=None):
         )
         
         if response.status_code != 200:
-            error_msg = response.json().get('error', {}).get('message', 'Unknown error')
+            try:
+                error_msg = response.json().get('error', {}).get('message', 'Unknown error')
+            except:
+                error_msg = response.text[:200] if response.text else f'HTTP {response.status_code}'
             print(f"❌ ElevenLabs API error: {error_msg}")
             return jsonify({
-                'error': f'Failed to clone voice: {error_msg}'
+                'error': f'Failed to clone voice. Please check your API key and try again.'
             }), 500
         
-        voice_data = response.json()
+        try:
+            voice_data = response.json()
+        except:
+            return jsonify({
+                'error': 'Invalid response from ElevenLabs API'
+            }), 500
         voice_id = voice_data.get('voice_id')
         
         if not voice_id:
@@ -292,12 +301,26 @@ def clone_voice(requests_remaining=None):
         )
         
         if tts_response.status_code != 200:
-            print(f"❌ TTS API error: {tts_response.text}")
+            try:
+                error_data = tts_response.json()
+                error_msg = error_data.get('error', {}).get('message', 'Unknown error')
+            except:
+                error_msg = tts_response.text[:200] if tts_response.text else f'HTTP {tts_response.status_code}'
+            print(f"❌ TTS API error: {error_msg}")
             return jsonify({
-                'error': 'Failed to generate speech from cloned voice'
+                'error': 'Failed to generate speech. Please try again.'
             }), 500
         
-        cloned_audio = tts_response.content
+        try:
+            cloned_audio = tts_response.content
+            if not cloned_audio or len(cloned_audio) == 0:
+                raise ValueError('Empty audio response from API')
+        except Exception as e:
+            print(f"❌ Error processing audio: {e}")
+            return jsonify({
+                'error': 'Failed to process audio response'
+            }), 500
+        
         print(f"✓ Speech generated successfully ({len(cloned_audio)} bytes)")
         
         # ====================================
@@ -332,13 +355,22 @@ def clone_voice(requests_remaining=None):
         }), 200
         
     except requests.exceptions.Timeout:
-        return jsonify({'error': 'Request timeout. Please try again.'}), 504
+        print(f"⏱️  Request timeout - ElevenLabs API took too long")
+        return jsonify({'error': 'Request timeout. ElevenLabs service is slow. Please try again in a moment.'}), 504
+    except requests.exceptions.ConnectionError as e:
+        print(f"❌ Connection error: {e}")
+        return jsonify({'error': 'Cannot connect to ElevenLabs API. Check your internet connection.'}), 503
     except requests.exceptions.RequestException as e:
         print(f"❌ Request error: {e}")
-        return jsonify({'error': f'Network error: {str(e)}'}), 500
+        return jsonify({'error': 'Network communication error. Please try again.'}), 500
+    except ValueError as e:
+        print(f"❌ Value error: {e}")
+        return jsonify({'error': f'Invalid data: {str(e)}'}), 400
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
-        return jsonify({'error': f'An error occurred: {str(e)}'}), 500
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': 'An error occurred. Please check the server logs.'}), 500
 
 @app.route('/api/status', methods=['GET'])
 def status():

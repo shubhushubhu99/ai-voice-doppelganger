@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Voice Doppelganger - Setup Verification Script
 

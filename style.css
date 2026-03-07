@@ -10,7 +10,7 @@
 
 :root {
     /* Color Variables */
-    --primary-color: #7c3aed;      /* Purple */
+    --primary-color: #241d2f;      /* Purple */
     --success-color: #10b981;       /* Green */
     --danger-color: #ef4444;        /* Red */
     --warning-color: #f59e0b;       /* Amber */
@@ -21,33 +21,36 @@
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* ===========================
-   BODY & GENERAL STYLES
-   =========================== */
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0c174a, #2b193c ,#262738);
     color: var(--dark-text);
     line-height: 1.6;
     min-height: 100vh;
     padding: 20px;
+    width: 100%;
 }
 
-/* ===========================
-   CONTAINER & LAYOUT
-   =========================== */
 
 .container {
-    max-width: 800px;
+    max-width: 1200px;
+    width: 150%;
+
     margin: 0 auto;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+    background: rgba(255,255,255,0,0.15);
+    backdrop-filter: blur(27px);
+    -webkit-backdrop-filter: blur(27px);
+
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0,0.3);
     overflow: hidden;
+    position: relative;
+    
 }
 
 header {
+    grid-column: span 2;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     padding: 40px 20px;
@@ -67,9 +70,13 @@ header p {
 
 main {
     padding: 30px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 footer {
+    grid-column: span 2;
     background: var(--light-bg);
     padding: 20px;
     text-align: center;
@@ -83,17 +90,24 @@ footer {
    =========================== */
 
 .card {
-    background: var(--light-bg);
+    background: rgba(255,255,255,0,0.15);
     border: 2px solid var(--border-color);
     border-radius: 8px;
     padding: 25px;
     margin-bottom: 25px;
     transition: all 0.3s ease;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transition: transfrom 0.3s ease, box-shadow 0.3s ease;
+    text-shadow: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .card:hover {
     border-color: var(--primary-color);
-    box-shadow: var(--shadow);
+    box-shadow: 0 15px 35px rgba(55, 101, 239, 0.25);
+    transform: scale(1.05);
 }
 
 .card h2 {
@@ -114,6 +128,7 @@ footer {
 }
 
 .info-card {
+    grid-column: span 2;
     background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(99, 102, 241, 0.05));
     border-color: var(--primary-color);
 }
@@ -334,6 +349,11 @@ audio {
    =========================== */
 
 @media (max-width: 600px) {
+
+    main{
+        grid-template-columns: 1fr;
+    }
+
     header h1 {
         font-size: 1.8em;
     }
@@ -354,4 +374,30 @@ audio {
     main {
         padding: 15px;
     }
+}
+#recordbtn{
+    color: #6b62ed;
+}
+#stopbtn{
+    color: rgb(151, 31, 5);
+}
+#clr{
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: #839eca;
+}
+
+#wht{
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: #839eca;
+}
+#ab{
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: #839eca;
+}
+#cd{
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

@@ -16,7 +16,6 @@
 let mediaRecorder;           // Object to record audio
 let audioChunks = [];        // Array to store audio data
 let recordedBlob;            // Blob object of recorded audio
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
 // ======================================
 // DOM ELEMENTS
@@ -170,17 +169,35 @@ async function generateClonedVoice() {
         formData.append('audio', recordedBlob, 'recording.webm');
         formData.append('text', textInput.value);
         
-        // Send data to Flask backend
-        const response = await fetch('/api/clone-voice', {
+        // Send data to Flask backend at port 5000
+        const response = await fetch('http://localhost:5000/api/clone-voice', {
             method: 'POST',
             body: formData
         });
         
-        // Parse response
-        const data = await response.json();
-        
+        // Check if response is valid before parsing
         if (!response.ok) {
-            throw new Error(data.error || 'Failed to generate cloned voice');
+            // Try to get error message from response
+            let errorMsg = 'Failed to generate cloned voice';
+            try {
+                const data = await response.json();
+                errorMsg = data.error || errorMsg;
+            } catch (e) {
+                // If response isn't JSON, use status text
+                errorMsg = response.statusText || errorMsg;
+                if (response.status === 0) {
+                    errorMsg = 'Cannot connect to backend server. Is Flask running on port 5000?';
+                }
+            }
+            throw new Error(errorMsg);
+        }
+        
+        // Parse successful response
+        let data;
+        try {
+            data = await response.json();
+        } catch (e) {
+            throw new Error('Invalid response from server. Is Flask running on port 5000?');
         }
         
         // Show success message
