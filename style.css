@@ -1,0 +1,357 @@
+/* ===========================
+   VOICE DOPPELGANGER APP STYLES
+   =========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color Variables */
+    --primary-color: #7c3aed;      /* Purple */
+    --success-color: #10b981;       /* Green */
+    --danger-color: #ef4444;        /* Red */
+    --warning-color: #f59e0b;       /* Amber */
+    --secondary-color: #6366f1;     /* Indigo */
+    --light-bg: #f9fafb;            /* Light Gray */
+    --dark-text: #111827;           /* Dark Gray */
+    --border-color: #e5e7eb;        /* Border Gray */
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ===========================
+   BODY & GENERAL STYLES
+   =========================== */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--dark-text);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ===========================
+   CONTAINER & LAYOUT
+   =========================== */
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+header p {
+    font-size: 1.1em;
+    opacity: 0.95;
+}
+
+main {
+    padding: 30px 20px;
+}
+
+footer {
+    background: var(--light-bg);
+    padding: 20px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #6b7280;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ===========================
+   CARDS & SECTIONS
+   =========================== */
+
+.card {
+    background: var(--light-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+}
+
+.card h2 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.card h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.card p {
+    color: #6b7280;
+    margin-bottom: 15px;
+}
+
+.info-card {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(99, 102, 241, 0.05));
+    border-color: var(--primary-color);
+}
+
+/* ===========================
+   BUTTONS
+   =========================== */
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #6d28d9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #4f46e5;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+/* ===========================
+   FORM ELEMENTS
+   =========================== */
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 1em;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+audio {
+    width: 100%;
+    margin: 15px 0;
+    border-radius: 6px;
+}
+
+/* ===========================
+   STATUS INDICATORS & MESSAGES
+   =========================== */
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background: #fef3c7;
+    border: 2px solid #fcd34d;
+    border-radius: 6px;
+    color: #92400e;
+    font-weight: 600;
+    margin: 15px 0;
+}
+
+.pulse {
+    width: 10px;
+    height: 10px;
+    background: #f59e0b;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.error-message {
+    padding: 12px 15px;
+    background: #fee2e2;
+    border: 2px solid #fecaca;
+    border-radius: 6px;
+    color: #991b1b;
+    margin: 15px 0;
+    font-weight: 600;
+}
+
+.success-message {
+    padding: 12px 15px;
+    background: #dcfce7;
+    border: 2px solid #86efac;
+    border-radius: 6px;
+    color: #166534;
+    margin: 15px 0;
+    font-weight: 600;
+}
+
+/* ===========================
+   LOADING SPINNER
+   =========================== */
+
+.loading {
+    text-align: center;
+    padding: 30px;
+}
+
+.spinner {
+    border: 4px solid var(--light-bg);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading p {
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* ===========================
+   UTILITY CLASSES
+   =========================== */
+
+.char-count {
+    display: block;
+    text-align: right;
+    font-size: 0.9em;
+    color: #9ca3af;
+    margin-top: 5px;
+}
+
+.info-text {
+    font-size: 0.9em;
+    color: #6b7280;
+    font-style: italic;
+}
+
+#playbackSection h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* ===========================
+   RESPONSIVE DESIGN
+   =========================== */
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        flex: unset;
+        width: 100%;
+    }
+
+    main {
+        padding: 15px;
+    }
+}

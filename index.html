@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Doppelganger</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎤 AI Voice Doppelganger</h1>
+            <p>Clone your voice and read any text with your unique tone</p>
+        </header>
+
+        <main>
+            <!-- Step 1: Record Voice Section -->
+            <section class="card">
+                <h2>Step 1: Record Your Voice</h2>
+                <p>Click the button below to record a sample of your voice (10-30 seconds recommended)</p>
+                
+                <div class="button-group">
+                    <button id="recordBtn" class="btn btn-primary">
+                        🎙️ Start Recording
+                    </button>
+                    <button id="stopBtn" class="btn btn-danger" disabled>
+                        ⏹️ Stop Recording
+                    </button>
+                </div>
+
+                <!-- Recording status indicator -->
+                <div id="recordingStatus" class="status-indicator" style="display: none;">
+                    <span class="pulse"></span>
+                    Recording in progress...
+                </div>
+
+                <!-- Playback original recording -->
+                <div id="playbackSection" style="display: none;">
+                    <h3>Your Recording:</h3>
+                    <audio id="audioPlayback" controls></audio>
+                    <button id="playBtn" class="btn btn-secondary">
+                        ▶️ Play Recording
+                    </button>
+                </div>
+            </section>
+
+            <!-- Step 2: Enter Text Section -->
+            <section class="card">
+                <h2>Step 2: Enter Text to Clone</h2>
+                <p>Type the text you want to hear in your cloned voice</p>
+                
+                <textarea 
+                    id="textInput" 
+                    placeholder="Enter the text you want to hear in your cloned voice... (Max 500 characters)"
+                    maxlength="500"
+                    rows="4"
+                ></textarea>
+                <span id="charCount" class="char-count">0/500</span>
+            </section>
+
+            <!-- Step 3: Submit and Generate Section -->
+            <section class="card">
+                <h2>Step 3: Generate Cloned Voice</h2>
+                <p>Submit your recording and text to generate the cloned voice</p>
+                
+                <button id="submitBtn" class="btn btn-success" disabled>
+                    🚀 Generate Cloned Voice
+                </button>
+
+                <!-- Loading indicator -->
+                <div id="loadingIndicator" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Processing your voice... This may take 30 seconds</p>
+                </div>
+
+                <!-- Error message display -->
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+                <!-- Success message display -->
+                <div id="successMessage" class="success-message" style="display: none;"></div>
+            </section>
+
+            <!-- Step 4: Playback Cloned Voice Section -->
+            <section class="card" id="clonedVoiceSection" style="display: none;">
+                <h2>Step 4: Your Cloned Voice</h2>
+                <p>Listen to your text read in your cloned voice</p>
+                
+                <audio id="clonedAudioPlayback" controls></audio>
+                <button id="clonedPlayBtn" class="btn btn-secondary">
+                    ▶️ Play Cloned Voice
+                </button>
+            </section>
+
+            <!-- Rate Limit Status -->
+            <section class="card info-card">
+                <h3>📊 API Usage</h3>
+                <p id="rateStatus">Requests remaining: --</p>
+                <p class="info-text">Max 5 requests per user per minute</p>
+            </section>
+        </main>
+
+        <footer>
+            <p>Your API key is secure and never leaves your computer. All processing happens on your local server.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
