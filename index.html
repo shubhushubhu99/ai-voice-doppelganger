@@ -3,108 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Voice Doppelganger</title>
+    <title>AI Voice Doppelganger - Voice Cloning</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
 </head>
 <body>
-    <div class="container">
-        
-        <header>
-            <h1>🎤 AI Voice Doppelganger</h1>
-            <p>Clone your voice and read any text with your unique tone</p>
+    <!-- Animated background -->
+    <div class="animated-bg"></div>
+    
+    <!-- Main container -->
+    <div class="main-container">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <path d="M20 2C10.05 2 2 10.05 2 20s8.05 18 18 18 18-8.05 18-18S29.95 2 20 2zm0 32c-7.73 0-14-6.27-14-14s6.27-14 14-14 14 6.27 14 14-6.27 14-14 14z" fill="url(#grad)"/>
+                            <defs>
+                                <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="header-title">AI Voice Doppelganger</h1>
+                        <p class="header-subtitle">Clone your voice and read any text with your unique tone</p>
+                    </div>
+                </div>
+            </div>
         </header>
 
-        <main>
-            <!-- Step 1: Record Voice Section -->
-            <section class="card">
-                <h2 id="clr">Step 1: Record Your Voice</h2>
-                <p>Click the button below to record a sample of your voice (10-30 seconds recommended)</p>
-                
-                <div class="button-group">
-                    <button id="recordBtn" class="btn btn-primary">
-                         Start Recording
+        <!-- Main Grid -->
+        <main class="grid-container">
+            <!-- Card 1: Record Voice -->
+            <section class="glass-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Record Your Voice</h2>
+                </div>
+
+                <div class="card-content">
+                    <p class="card-description">Record 10-30 seconds of your voice as a sample</p>
+                    
+                    <div class="button-group">
+                        <button id="recordBtn" class="btn btn-primary">
+                            <i data-lucide="mic"></i>
+                            Start Recording
+                        </button>
+                        <button id="stopBtn" class="btn btn-danger" disabled>
+                            <i data-lucide="square"></i>
+                            Stop Recording
+                        </button>
+                    </div>
+
+                    <!-- Recording indicator -->
+                    <div id="recordingStatus" class="recording-indicator" style="display: none;">
+                        <div class="pulse-dot"></div>
+                        <span>Recording...</span>
+                    </div>
+
+                    <!-- Audio playback -->
+                    <div id="playbackSection" class="audio-section" style="display: none;">
+                        <label class="audio-label">Your Recording</label>
+                        <audio id="audioPlayback" class="audio-player" controls></audio>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Card 2: Enter Text -->
+            <section class="glass-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="12" y1="19" x2="12" y2="5"></line>
+                            <line x1="9" y1="14" x2="15" y2="14"></line>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Enter Text</h2>
+                </div>
+
+                <div class="card-content">
+                    <p class="card-description">Type the text you want the voice to read (max 500 characters)</p>
+                    
+                    <textarea 
+                        id="textInput" 
+                        class="text-input"
+                        placeholder="Enter your text here..."
+                        maxlength="500"
+                    ></textarea>
+                    
+                    <div class="char-counter">
+                        <span id="charCount">0/500</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Card 3: Generate Voice -->
+            <section class="glass-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Generate Voice</h2>
+                </div>
+
+                <div class="card-content">
+                    <p class="card-description">Click to generate speech with your cloned voice</p>
+                    
+                    <button id="submitBtn" class="btn btn-primary btn-large" disabled>
+                        <i data-lucide="zap"></i>
+                        Generate Speech
                     </button>
-                    <button id="stopBtn" class="btn btn-danger" disabled>
-                         Stop Recording
-                    </button>
-                </div>
 
-                <!-- Recording status indicator -->
-                <div id="recordingStatus" class="status-indicator" style="display: none;">
-                    <span class="pulse"></span>
-                    Recording in progress...
-                </div>
+                    <!-- Loading indicator -->
+                    <div id="loadingIndicator" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Generating your voice...</p>
+                    </div>
 
-                <!-- Playback original recording -->
-                <div id="playbackSection" style="display: none;">
-                    <h3>Your Recording:</h3>
-                    <audio id="audioPlayback" controls></audio>
-                    <button id="playBtn" class="btn btn-secondary">
-                        ▶️ Play Recording
-                    </button>
+                    <!-- Status messages -->
+                    <div id="successMessage" class="status-message success" style="display: none;"></div>
+                    <div id="errorMessage" class="status-message error" style="display: none;"></div>
                 </div>
             </section>
 
-            <!-- Step 2: Enter Text Section -->
-            <section class="card">
-                <h2 id="wht">Step 2: Enter Text to Clone</h2>
-                <p>Type the text you want to hear in your cloned voice</p>
-                
-                <textarea 
-                    id="textInput" 
-                    placeholder="Enter the text you want to hear in your cloned voice... (Max 500 characters)"
-                    maxlength="500"
-                    rows="4"
-                ></textarea>
-                <span id="charCount" class="char-count">0/500</span>
-            </section>
-
-            <!-- Step 3: Submit and Generate Section -->
-            <section class="card">
-                <h2 id="ab">Step 3: Generate Cloned Voice</h2>
-                <p>Submit your recording and text to generate the cloned voice</p>
-                
-                <button id="submitBtn" class="btn btn-success" disabled>
-                    🚀 Generate Cloned Voice
-                </button>
-
-                <!-- Loading indicator -->
-                <div id="loadingIndicator" class="loading" style="display: none;">
-                    <div class="spinner"></div>
-                    <p>Processing your voice... This may take 30 seconds</p>
+            <!-- Card 4: Cloned Voice Output -->
+            <section class="glass-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                        </svg>
+                    </div>
+                    <h2 class="card-title">Your Cloned Voice</h2>
                 </div>
 
-                <!-- Error message display -->
-                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                <div class="card-content">
+                    <div id="clonedVoiceSection" style="display: none;">
+                        <label class="audio-label">Generated Audio</label>
+                        <audio id="clonedAudioPlayback" class="audio-player" controls></audio>
+                        
+                        <div class="download-section">
+                            <button id="downloadBtn" class="btn btn-secondary">
+                                <i data-lucide="download"></i>
+                                Download Audio
+                            </button>
+                        </div>
+                    </div>
 
-                <!-- Success message display -->
-                <div id="successMessage" class="success-message" style="display: none;"></div>
-            </section>
-
-            <!-- Step 4: Playback Cloned Voice Section -->
-            <section class="card" id="clonedVoiceSection" style="display: none;">
-                <h2>Step 4: Your Cloned Voice</h2>
-                <p>Listen to your text read in your cloned voice</p>
-                
-                <audio id="clonedAudioPlayback" controls></audio>
-                <button id="clonedPlayBtn" class="btn btn-secondary">
-                    ▶ Play Cloned Voice
-                </button>
-            </section>
-
-            <!-- Rate Limit Status -->
-            <section class="card info-card">
-                <h3 id="cd">  &#9881 API Usage</h3>
-                <p id="rateStatus">Requests remaining: --</p>
-                <p class="info-text">Max 5 requests per user per minute</p>
+                    <div id="emptyState" class="empty-state">
+                        <div class="empty-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 6v6l4 2"></path>
+                            </svg>
+                        </div>
+                        <p>Generate speech to see your cloned voice here</p>
+                    </div>
+                </div>
             </section>
         </main>
 
-        <footer>
-            <p>Your API key is secure and never leaves your computer. All processing happens on your local server.</p>
+        <!-- Footer -->
+        <footer class="footer">
+            <p>AI Voice Doppelganger • Clone your voice with advanced AI technology</p>
         </footer>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

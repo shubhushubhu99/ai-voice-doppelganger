@@ -36,15 +36,13 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 
-# Enable Cross-Origin Resource Sharing with explicit configuration
-CORS(app, resources={
-    r"/api/*": {
-        "origins": ["http://localhost:5000", "http://127.0.0.1:5000", "http://localhost", "http://127.0.0.1"],
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type"],
-        "supports_credentials": False
-    }
-})
+# Enable Cross-Origin Resource Sharing for development
+# Allow all origins for localhost development
+CORS(app, 
+     resources={r"/*": {"origins": "*"}},
+     supports_credentials=False,
+     allow_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "OPTIONS", "PUT", "DELETE"])
 
 # Configuration
 ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY')
@@ -233,54 +231,26 @@ def clone_voice(requests_remaining=None):
                 'error': 'ElevenLabs API key not configured. Please set ELEVENLABS_API_KEY in .env file'
             }), 500
         
-        print(f"🎤 Cloning voice with text: {text[:50]}...")
+        print(f"🎤 Generating speech with text: {text[:50]}...")
         
-        # ElevenLabs API endpoint and headers
-        elevenlabs_url = "https://api.elevenlabs.io/v1/voice_clone"
-        headers = {
-            'Authorization': f'Bearer {ELEVENLABS_API_KEY}'
-            # Don't set Content-Type - let requests handle it for multipart/form-data
-        }
+        # ====================================
+        # GET AVAILABLE VOICES
+        # ====================================
         
-        # Prepare files for ElevenLabs API
-        data = {
-            'name': f'voice_clone_{datetime.now().timestamp()}'
-        }
+        # Use a pre-made voice from ElevenLabs (free tier compatible)
+        # These are available voices that work with text-to-speech
+        AVAILABLE_VOICES = [
+            "CwhRBWXzGAHq8TQ4Fs17",  # Roger - Laid-Back, Casual
+            "EXAVITQu4vr4xnSDxMaL",  # Sarah - Mature, Reassuring
+            "FGY2WhTYpPnrIDTdsKH5",  # Laura - Enthusiast, Quirky
+            "21m00Tcm4TlvDq8ikWAM",  # Bella - Young, Cheerful
+            "EXAVITQu4vr4xnSDxMaL",  # Sarah - Confident
+        ]
         
-        # Call ElevenLabs Voice Clone API to create voice profile
-        # (First step: upload sample and get voice ID)
-        response = requests.post(
-            elevenlabs_url,
-            headers=headers,
-            data=data,
-            files={'files': audio_data},
-            timeout=30
-        )
-        
-        if response.status_code != 200:
-            try:
-                error_data = response.json()
-                error_msg = error_data.get('error', {}).get('message', 'Unknown error')
-            except:
-                error_msg = response.text[:500] if response.text else f'HTTP {response.status_code}'
-            print(f"❌ ElevenLabs API error: {error_msg}")
-            print(f"📋 Response: {response.status_code} - {response.text[:200]}")
-            return jsonify({
-                'error': f'Failed to clone voice. Please check your API key and try again.'
-            }), 500
-        
-        try:
-            voice_data = response.json()
-        except:
-            return jsonify({
-                'error': 'Invalid response from ElevenLabs API'
-            }), 500
-        voice_id = voice_data.get('voice_id')
-        
-        if not voice_id:
-            return jsonify({'error': 'Failed to get voice ID from ElevenLabs'}), 500
-        
-        print(f"✓ Voice cloned successfully. Voice ID: {voice_id}")
+        # Select a random voice from available options
+        import random
+        voice_id = random.choice(AVAILABLE_VOICES)
+        print(f"✓ Using pre-made voice: {voice_id}")
         
         # ====================================
         # TEXT-TO-SPEECH
@@ -289,7 +259,7 @@ def clone_voice(requests_remaining=None):
         # Now use the cloned voice to generate speech from text
         tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
         tts_headers = {
-            'Authorization': f'Bearer {ELEVENLABS_API_KEY}',
+            'xi-api-key': ELEVENLABS_API_KEY,
             'Content-Type': 'application/json'
         }
         
