@@ -170,7 +170,7 @@ async function generateClonedVoice() {
         formData.append('text', textInput.value);
         
         // Send data to Flask backend at port 5000
-        const response = await fetch('http://localhost:5000/api/clone-voice', {
+        const response = await fetch('http://127.0.0.1:5000/api/clone-voice', {
             method: 'POST',
             body: formData
         });
