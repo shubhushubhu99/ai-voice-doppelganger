@@ -35,7 +35,16 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # Enable Cross-Origin Resource Sharing
+
+# Enable Cross-Origin Resource Sharing with explicit configuration
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:5000", "http://127.0.0.1:5000", "http://localhost", "http://127.0.0.1"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"],
+        "supports_credentials": False
+    }
+})
 
 # Configuration
 ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY')
@@ -229,14 +238,11 @@ def clone_voice(requests_remaining=None):
         # ElevenLabs API endpoint and headers
         elevenlabs_url = "https://api.elevenlabs.io/v1/voice_clone"
         headers = {
-            'Authorization': f'Bearer {ELEVENLABS_API_KEY}',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Authorization': f'Bearer {ELEVENLABS_API_KEY}'
+            # Don't set Content-Type - let requests handle it for multipart/form-data
         }
         
         # Prepare files for ElevenLabs API
-        files = {
-            'files': audio_file.stream
-        }
         data = {
             'name': f'voice_clone_{datetime.now().timestamp()}'
         }
@@ -253,10 +259,12 @@ def clone_voice(requests_remaining=None):
         
         if response.status_code != 200:
             try:
-                error_msg = response.json().get('error', {}).get('message', 'Unknown error')
+                error_data = response.json()
+                error_msg = error_data.get('error', {}).get('message', 'Unknown error')
             except:
-                error_msg = response.text[:200] if response.text else f'HTTP {response.status_code}'
+                error_msg = response.text[:500] if response.text else f'HTTP {response.status_code}'
             print(f"❌ ElevenLabs API error: {error_msg}")
+            print(f"📋 Response: {response.status_code} - {response.text[:200]}")
             return jsonify({
                 'error': f'Failed to clone voice. Please check your API key and try again.'
             }), 500
@@ -411,4 +419,4 @@ if __name__ == '__main__':
     
     # Run Flask development server
     # debug=True enables auto-reload and error debugging
-    app.run(debug=True, host='localhost', port=5000)
+    app.run(debug=True, host='127.0.0.1', port=5000)
